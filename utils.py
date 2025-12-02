@@ -1,45 +1,74 @@
 import time
 import functools
+import re
 from pathlib import Path
 from collections.abc import Callable
 import pyperclip
+from aocd import get_data
 
 class RunnerConfig:
     """Global configuration for the runner."""
-    INPUT_FILE = Path.cwd() / 'input.txt'
     ENABLE_LOGGING = True
     COPY_TO_CLIPBOARD = True
 
-def run_solver(part_name: str, enable_print: bool = True, strip_lines: bool = True):
+def _extract_number(s: str) -> int | None:
+    match = re.search(r'\d+', s)
+    return int(match.group()) if match else None
+
+def run_solver(part_name: str, enable_print: bool = True, strip_lines: bool = True, raw_input: bool = False):
     """
     Decorator to read input, time execution, and handle output.
     
     :param part_name: Label for the output (e.g., "Part 1")
-    :param enable_print: If False, suppresses stdout (useful for unit tests)
-    :param strip_lines: If True, strips newline characters from input lines automatically
+    :param input_data: Override file input
+    :param enable_print: If False, suppresses stdout
+    :param strip_lines: If True, strips newline characters from input lines (ignored if raw_input=True)
+    :param raw_input: If True, passes the whole file as a single string instead of a list of lines
     """
     def decorator(func: Callable):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            if not RunnerConfig.INPUT_FILE.exists():
-                print(f"Error: {RunnerConfig.INPUT_FILE} not found.")
-                return
+            script_path = Path(func.__code__.co_filename)
+            script_dir = script_path.parent
+            year = _extract_number(script_dir.name)
+            day = _extract_number(script_path.stem)
+            if not year and not day:
+                print(f"Error: Could not parse Day/Year from path: {script_path}")
+            input_file = script_dir / f'input{day}.txt'
+            if not input_file.exists():
+                try:
+                    print(f"Downloading input for Day {day}, {year}...")
+                    data = get_data(day=day, year=year)
+                    with open(input_file, 'w', encoding='utf-8', newline='\n') as f:
+                        f.write(data)
+                except Exception as e:
+                    print(f"Error fetching data with aocd: {e}")
+                    return
 
-            with open(RunnerConfig.INPUT_FILE, 'r') as f:
-                if strip_lines:
+            parse_start = time.perf_counter()
+            
+            with open(input_file, 'r') as f:
+                if raw_input:
+                    data = f.read()
+                    if strip_lines:
+                        data = data.strip()
+                elif strip_lines:
                     data = [line.strip() for line in f.readlines()]
                 else:
                     data = f.readlines()
-
-            start_time = time.perf_counter()
-            result = func(data, *args, **kwargs)
-            end_time = time.perf_counter()
             
-            elapsed = (end_time - start_time) * 1000
+            parse_end = time.perf_counter()
+
+            exec_start = time.perf_counter()
+            result = func(data, *args, **kwargs)
+            exec_end = time.perf_counter()
+            
+            parse_ms = (parse_end - parse_start) * 1000
+            exec_ms = (exec_end - exec_start) * 1000
 
             if enable_print and RunnerConfig.ENABLE_LOGGING:
-                time_str = f"[{elapsed:.4f} ms]"
-                print(f"\033[1;36m{part_name}:\033[0m \033[1;32m{result}\033[0m \033[33m{time_str}\033[0m")
+                timing_str = f"\033[90m[Parse: {parse_ms:.4f}ms]\033[0m \033[33m[Run: {exec_ms:.4f}ms]\033[0m"
+                print(f"\033[1;36m{part_name}:\033[0m \033[1;32m{result}\033[0m {timing_str}")
             
             if RunnerConfig.COPY_TO_CLIPBOARD and result is not None:
                 pyperclip.copy(str(result))
