@@ -34,7 +34,7 @@ def run_solver(part_name: str, enable_print: bool = True, strip_lines: bool = Tr
             day = _extract_number(script_path.stem)
             if not year and not day:
                 print(f"Error: Could not parse Day/Year from path: {script_path}")
-            input_file = script_dir / f'input{day}.txt'
+            input_file = script_dir / f'input/input{day}.txt'
             if not input_file.exists():
                 try:
                     print(f"Downloading input for Day {day}, {year}...")
