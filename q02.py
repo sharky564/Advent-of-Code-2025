@@ -5,7 +5,7 @@ def process_data(d: list[str]):
     return [l.split('-') for l in d[0].split(',')]
 
 
-@run_solver("Part 1")
+@run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:
     data = process_data(d)
     t = 0
@@ -20,7 +20,7 @@ def part1(d: list[str]) -> int:
     return t
     
 
-@run_solver("Part 2")
+@run_solver("Part 2", submit_result=False)
 def part2(d: list[str]) -> int:
     data = process_data(d)
     i = set()

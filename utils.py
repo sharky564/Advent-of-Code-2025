@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from collections.abc import Callable
 import pyperclip
-from aocd import get_data
+from aocd import get_data, submit
 
 class RunnerConfig:
     """Global configuration for the runner."""
@@ -15,12 +15,12 @@ def _extract_number(s: str) -> int | None:
     match = re.search(r'\d+', s)
     return int(match.group()) if match else None
 
-def run_solver(part_name: str, enable_print: bool = True, strip_lines: bool = True, raw_input: bool = False):
+def run_solver(part_name: str, submit_result: bool, enable_print: bool = True, strip_lines: bool = True, raw_input: bool = False):
     """
     Decorator to read input, time execution, and handle output.
     
     :param part_name: Label for the output (e.g., "Part 1")
-    :param input_data: Override file input
+    :param submit_result: If True, prompts to submit the result via aocd. Falls back to clipboard if 'n'.
     :param enable_print: If False, suppresses stdout
     :param strip_lines: If True, strips newline characters from input lines (ignored if raw_input=True)
     :param raw_input: If True, passes the whole file as a single string instead of a list of lines
@@ -70,7 +70,25 @@ def run_solver(part_name: str, enable_print: bool = True, strip_lines: bool = Tr
                 timing_str = f"\033[90m[Parse: {parse_ms:.4f}ms]\033[0m \033[33m[Run: {exec_ms:.4f}ms]\033[0m"
                 print(f"\033[1;36m{part_name}:\033[0m \033[1;32m{result}\033[0m {timing_str}")
             
-            if RunnerConfig.COPY_TO_CLIPBOARD and result is not None:
+            submitted = False
+            
+            if submit_result and result is not None:
+                part_id = None
+                if "1" in part_name:
+                    part_id = "a"
+                elif "2" in part_name:
+                    part_id = "b"
+                
+                if part_id:
+                    user_resp = input(f"\033[33mSubmit answer '{result}' for Day {day} Part {part_id}? [y/n] \033[0m")
+                    if user_resp.lower().startswith('y'):
+                        print("\033[90mSubmitting...\033[0m")
+                        submit(result, part=part_id, day=day, year=year)
+                        submitted = True
+                else:
+                    print(f"\033[91mCannot determine part (a/b) from name '{part_name}', skipping submission.\033[0m")
+
+            if not submitted and RunnerConfig.COPY_TO_CLIPBOARD and result is not None:
                 pyperclip.copy(str(result))
                 if enable_print:
                     print("\033[90m(Copied to clipboard)\033[0m")
