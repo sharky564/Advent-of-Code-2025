@@ -25,9 +25,9 @@ def part2(d: list[str]) -> int:
     data = process_data(d)
     i = set()
     for s, e in data:
-        for n in range(len(s), len(e) + 1):
+        for n in range(min(2, len(s)), len(e) + 1):
             for l in range(1, n // 2 + 1):
-                if n % l == 0 and n // l >= 2:
+                if n % l == 0:
                     m = (10**n - 1) // (10**l - 1)
                     a = max(ceil(int(s) / m), 10**(l - 1))
                     b = min(int(e) // m + 1, 10**l)
