@@ -19,20 +19,11 @@ def find_largest_subsequence(b, l):
 
 @run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:
-    data = process_data(d)
-    t = 0
-    for b in data:
-        t += find_largest_subsequence(b, 2)
-    return t
+    return sum(map(lambda b: find_largest_subsequence(b, 2), process_data(d)))
 
 @run_solver("Part 2", submit_result=False)
 def part2(d: list[str]) -> int:
-    data = process_data(d)
-    t = 0
-    for b in data:
-        x = find_largest_subsequence(b, 12)
-        t += x
-    return t
+    return sum(map(lambda b: find_largest_subsequence(b, 12), process_data(d)))
 
 if __name__ == '__main__':
     part1()
