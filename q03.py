@@ -1,29 +1,27 @@
 from utils import run_solver
 
-def process_data(d: list[str]):
-    return [list(map(int, line)) for line in d]
-
-
-def find_largest_subsequence(b, l):
-    v = 0
-    while l > 0:
-        l -= 1
-        if l > 0:
-            s = max(b[:-l])
-        else:
-            s = max(b)
-        b = b[b.index(s) + 1:]
-        v = 10 * v + s
-    return v
+def find_largest_subsequence(s, k):
+    n = 0
+    r = []
+    l = len(s)
+    for i in range(l + 1 - k, l + 1):
+        for c in '9876543210':
+            if (j := s.find(c, n, i)) != -1:
+                r.append(c)
+                n = j + 1
+                break
+    return int(''.join(r))
 
 
 @run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:
-    return sum(map(lambda b: find_largest_subsequence(b, 2), process_data(d)))
+    return sum(map(lambda s: find_largest_subsequence(s, 2), d))
+
 
 @run_solver("Part 2", submit_result=False)
 def part2(d: list[str]) -> int:
-    return sum(map(lambda b: find_largest_subsequence(b, 12), process_data(d)))
+    return sum(map(lambda s: find_largest_subsequence(s, 12), d))
+
 
 if __name__ == '__main__':
     part1()
