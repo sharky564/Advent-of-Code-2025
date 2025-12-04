@@ -1,6 +1,6 @@
 from utils import run_solver
 
-def find_largest_subsequence(s, k):
+def find(s, k):
     n = 0
     r = []
     l = len(s)
@@ -15,12 +15,12 @@ def find_largest_subsequence(s, k):
 
 @run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:
-    return sum(map(lambda s: find_largest_subsequence(s, 2), d))
+    return sum(map(lambda s: find(s, 2), d))
 
 
 @run_solver("Part 2", submit_result=False)
 def part2(d: list[str]) -> int:
-    return sum(map(lambda s: find_largest_subsequence(s, 12), d))
+    return sum(map(lambda s: find(s, 12), d))
 
 
 if __name__ == '__main__':
