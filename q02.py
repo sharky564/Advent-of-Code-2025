@@ -1,8 +1,15 @@
 from utils import run_solver
 from math import ceil
 
+_CACHE = {}
+
 def process_data(d: list[str]):
-    return [l.split('-') for l in d[0].split(',')]
+    d_id = id(d)
+    if d_id in _CACHE:
+        return _CACHE[d_id]
+    result = [l.split('-') for l in d[0].split(',')]
+    _CACHE[d_id] = result
+    return result
 
 
 @run_solver("Part 1", submit_result=False)

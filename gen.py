@@ -4,8 +4,16 @@ import subprocess
 
 TEMPLATE = """from utils import run_solver
 
+_CACHE = {}
+
 def process_data(d: list[str]):
-    return d
+    d_id = id(d)
+    if d_id in _CACHE:
+        return _CACHE[d_id]
+    
+    result = d
+    _CACHE[d_id] = result
+    return result
 
 @run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:
