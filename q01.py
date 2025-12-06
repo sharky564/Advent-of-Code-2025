@@ -1,15 +1,8 @@
-from utils import run_solver
+from utils import run_solver, cache_by_id
 
-_CACHE = {}
-
+@cache_by_id
 def process_data(d: list[str]):
-    d_id = id(d)
-    if d_id in _CACHE:
-        return _CACHE[d_id]
-    result = (int(l[1:]) * (1 if l[0] == 'R' else -1) for l in d)
-    _CACHE[d_id] = result
-    return result
-
+    return (int(l[1:]) * (1 if l[0] == 'R' else -1) for l in d)
 
 @run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:

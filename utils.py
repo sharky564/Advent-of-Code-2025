@@ -15,6 +15,34 @@ def _extract_number(s: str) -> int | None:
     match = re.search(r'\d+', s)
     return int(match.group()) if match else None
 
+def cache_by_id(func: Callable):
+    """
+    Decorator that caches the result based on the unique ID of the first argument.
+    Useful for processing unhashable inputs (like lists) that don't change 
+    between Part 1 and Part 2.
+    """
+    cache = {}
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if not args:
+            return func(*args, **kwargs)
+        
+        input_id = id(args[0])
+        
+        if input_id in cache:
+            return cache[input_id]
+        
+        result = func(*args, **kwargs)
+        cache[input_id] = result
+        return result
+        
+    def clear_cache():
+        cache.clear()
+        
+    wrapper.cache_clear = clear_cache
+    return wrapper
+
 def run_solver(part_name: str, submit_result: bool, enable_print: bool = True, strip_lines: bool = True, raw_input: bool = False):
     """
     Decorator to read input, time execution, and handle output.

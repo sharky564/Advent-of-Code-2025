@@ -1,15 +1,9 @@
-from utils import run_solver
+from utils import run_solver, cache_by_id
 from math import ceil
 
-_CACHE = {}
-
+@cache_by_id
 def process_data(d: list[str]):
-    d_id = id(d)
-    if d_id in _CACHE:
-        return _CACHE[d_id]
-    result = [l.split('-') for l in d[0].split(',')]
-    _CACHE[d_id] = result
-    return result
+    return [l.split('-') for l in d[0].split(',')]
 
 
 @run_solver("Part 1", submit_result=False)
