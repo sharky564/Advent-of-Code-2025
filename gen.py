@@ -2,18 +2,11 @@ import sys
 import os
 import subprocess
 
-TEMPLATE = """from utils import run_solver
+TEMPLATE = """from utils import run_solver, cache_by_id
 
-_CACHE = {}
-
+@cache_by_id
 def process_data(d: list[str]):
-    d_id = id(d)
-    if d_id in _CACHE:
-        return _CACHE[d_id]
-    
-    result = d
-    _CACHE[d_id] = result
-    return result
+    return d
 
 @run_solver("Part 1", submit_result=False)
 def part1(d: list[str]) -> int:
