@@ -1,4 +1,17 @@
-from utils import run_solver, cache_by_id
+from utils import run_solver, cache_by_id, dprint
+
+TEST_INPUT = r'''..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.'''
+TEST_OUTPUT1 = 13
+TEST_OUTPUT2 = 43
 
 @cache_by_id
 def process_data(d: list[str]):
@@ -21,7 +34,7 @@ def process_data(d: list[str]):
         
     return g, r, W
 
-@run_solver("Part 1", submit_result=False)
+@run_solver("Part 1", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT1)])
 def part1(d: list[str]) -> int:
     g, r, w = process_data(d)
     o1, o2, o3, o4, o5, o6, o7, o8 = -w - 1, -w, -w + 1, -1, 1, w - 1, w, w + 1
@@ -31,7 +44,7 @@ def part1(d: list[str]) -> int:
             c += 1
     return c
 
-@run_solver("Part 2", submit_result=False)
+@run_solver("Part 2", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
 def part2(d: list[str]) -> int:
     g, r, w = process_data(d)
     

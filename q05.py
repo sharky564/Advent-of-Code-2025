@@ -1,5 +1,19 @@
-from utils import run_solver, cache_by_id
+from utils import run_solver, cache_by_id, dprint
 import bisect
+
+TEST_INPUT = r'''3-5
+10-14
+16-20
+12-18
+
+1
+5
+8
+11
+17
+32'''
+TEST_OUTPUT1 = 3
+TEST_OUTPUT2 = 14
 
 @cache_by_id
 def process_data(d: list[str]):
@@ -34,7 +48,7 @@ def process_data(d: list[str]):
 
     return (s, e, n)
 
-@run_solver("Part 1", submit_result=False)
+@run_solver("Part 1", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT1)])
 def part1(d: list[str]) -> int:
     s, e, n = process_data(d)
     bi = bisect.bisect_right
@@ -46,7 +60,7 @@ def part1(d: list[str]) -> int:
             c += 1
     return c
 
-@run_solver("Part 2", submit_result=False)
+@run_solver("Part 2", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
 def part2(d: list[str]) -> int:
     s, e, _ = process_data(d)
     return sum(e - s for s, e in zip(s, e))

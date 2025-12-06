@@ -2,18 +2,22 @@ import sys
 import os
 import subprocess
 
-TEMPLATE = """from utils import run_solver, cache_by_id
+TEMPLATE = """from utils import run_solver, cache_by_id, dprint
+
+TEST_INPUT = r''''''
+TEST_OUTPUT1 = 0
+TEST_OUTPUT2 = 0
 
 @cache_by_id
 def process_data(d: list[str]):
     return d
 
-@run_solver("Part 1", submit_result=False)
+@run_solver("Part 1", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT1)])
 def part1(d: list[str]) -> int:
     data = process_data(d)
     return None
 
-@run_solver("Part 2", submit_result=False)
+@run_solver("Part 2", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
 def part2(d: list[str]) -> int:
     data = process_data(d)
     return None
