@@ -62,4 +62,4 @@ def part2(d: list[str]) -> int:
 
 if __name__ == '__main__':
     part1()
-    # part2()
+    part2()
