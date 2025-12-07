@@ -3,7 +3,7 @@ from utils import run_solver, dprint
 TEST_INPUT = r'''123 328  51 64 
  45 64  387 23 
   6 98  215 314
-*   +   *   +   '''
+*   +   *   +  '''
 TEST_OUTPUT1 = 4277556
 TEST_OUTPUT2 = 3263827
 
@@ -26,7 +26,7 @@ def part1(d: list[str]) -> int:
     return total
 
 
-@run_solver("Part 2", submit_result=False, strip_lines=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
+@run_solver("Part 2", submit_result=False, strip_lines=False, tests=[(TEST_INPUT, TEST_OUTPUT2)], profile=True)
 def part2(d: list[str]) -> int:
     rows = d[:-1]
     ops = d[-1]
@@ -35,33 +35,28 @@ def part2(d: list[str]) -> int:
     val = 0
     mul = False
     for x in range(len(ops)):
-        op = ops[x]
         num = 0
         has_digit = False
-        
         for r in rows:
-            if x < len(r):
-                c = r[x]
-                if c != ' ':
-                    num = num * 10 + (ord(c) - 48)
-                    has_digit = True
-        
-        if op == '*':
-            val = num
-            mul = True
-        elif op == '+':
-            val = num
-            mul = False
-        else:
-            if has_digit:
-                if mul:
-                    val *= num
+            c = r[x]
+            if c != ' ':
+                num = num * 10 + (ord(c) - 48)
+                has_digit = True
+        match ops[x]:
+            case '*':
+                val = num
+                mul = True
+            case '+':
+                val = num
+                mul = False
+            case _:
+                if has_digit:
+                    if mul:
+                        val *= num
+                    else:
+                        val += num
                 else:
-                    val += num
-            else:
-                total += val
-                val = 0
-
+                    total += val
     total += val
     return total
 
