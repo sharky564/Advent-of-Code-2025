@@ -45,6 +45,7 @@ def cache_by_id(func: Callable):
         input_id = id(args[0])
         
         if input_id in cache:
+            print("Found in cache")
             return cache[input_id]
         
         result = func(*args, **kwargs)
@@ -222,12 +223,11 @@ def run_solver(
                 print(f"  \033[90mMin: {format_time(best)} | Median: {format_time(median)} | Max: {format_time(worst)}\033[0m")
 
             if profile:
+                for clear_func in _CACHE_REGISTRY:
+                    clear_func()
                 pr = cProfile.Profile()
                 pr.enable()
-                
-            result = func(data, *args, **kwargs)
-            
-            if profile:
+                func(data, *args, **kwargs)
                 pr.disable()
                 s = io.StringIO()
                 ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')

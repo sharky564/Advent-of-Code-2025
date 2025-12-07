@@ -7,10 +7,9 @@ TEST_INPUT = r'''987654321111111
 TEST_OUTPUT1 = 357
 TEST_OUTPUT2 = 3121910778619
 
-def find(s, k):
+def find(s, k, l):
     n = 0
     r = []
-    l = len(s)
     for i in range(l + 1 - k, l + 1):
         for c in '9876543210':
             if (j := s.find(c, n, i)) != -1:
@@ -22,12 +21,20 @@ def find(s, k):
 
 @run_solver("Part 1", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT1)])
 def part1(d: list[str]) -> int:
-    return sum(map(lambda s: find(s, 2), d))
+    total = 0
+    l = len(d[0])
+    for s in d:
+        total += find(s, 2, l)
+    return total
 
 
 @run_solver("Part 2", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
 def part2(d: list[str]) -> int:
-    return sum(map(lambda s: find(s, 12), d))
+    total = 0
+    l = len(d[0])
+    for s in d:
+        total += find(s, 12, l)
+    return total
 
 
 if __name__ == '__main__':
