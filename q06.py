@@ -26,11 +26,11 @@ def part1(d: list[str]) -> int:
     return total
 
 
-@run_solver("Part 2", submit_result=False, strip_lines=False, tests=[(TEST_INPUT, TEST_OUTPUT2)], profile=True)
+@run_solver("Part 2", submit_result=False, strip_lines=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
 def part2(d: list[str]) -> int:
     rows = d[:-1]
     ops = d[-1]
-    
+
     total = 0
     val = 0
     mul = False
