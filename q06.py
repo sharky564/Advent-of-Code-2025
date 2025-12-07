@@ -11,16 +11,16 @@ TEST_OUTPUT2 = 3263827
 @run_solver("Part 1", submit_result=False, benchmark=True, tests=[(TEST_INPUT, TEST_OUTPUT1)])
 def part1(d: list[str]) -> int:
     matrix = [line.split() for line in d[:-1]]
+    l = len(matrix)
     ops = d[-1].split()
     total = 0
     for c in range(len(ops)):
         val = int(matrix[0][c])
-        op = ops[c]
-        if op == '*':
-            for r in range(1, len(matrix)):
+        if ops[c] == '*':
+            for r in range(1, l):
                 val *= int(matrix[r][c])
         else:
-            for r in range(1, len(matrix)):
+            for r in range(1, l):
                 val += int(matrix[r][c])
         total += val
     return total
@@ -62,5 +62,4 @@ def part2(d: list[str]) -> int:
 
 if __name__ == '__main__':
     part1()
-    part2()
-
+    # part2()
