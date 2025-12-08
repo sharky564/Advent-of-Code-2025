@@ -27,7 +27,7 @@ def part1(d: list[str]) -> int:
     for r in range(2, len(d), 2):
         hits = active & int(d[r].translate(TRANS_TABLE), 2)
         t += hits.bit_count()
-        active = (active & ~hits) | (hits >> 1) | (hits << 1)
+        active = (active ^ hits) | (hits >> 1) | (hits << 1)
     return t
 
 
