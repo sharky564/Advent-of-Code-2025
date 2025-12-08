@@ -24,7 +24,7 @@ class RunnerConfig:
     COPY_TO_CLIPBOARD = False
     BENCHMARK_MIN_TIME = 1.0
     BENCHMARK_MIN_ITERS = 5
-    BENCHMARK_WARMUP = 1
+    BENCHMARK_WARMUP = 5
 
 def _extract_number(s: str) -> int | None:
     match = re.search(r'\d+', s)
