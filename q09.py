@@ -32,8 +32,8 @@ def part1(d: list[str]) -> int:
 def part2(d: list[str]) -> int:
     points = process_data(d)
     n = len(points)
-    xs = sorted(list(set(p[0] for p in points)))
-    ys = sorted(list(set(p[1] for p in points)))
+    xs = sorted(set(p[0] for p in points))
+    ys = sorted(set(p[1] for p in points))
     x_map = {x: i for i, x in enumerate(xs)}
     y_map = {y: i for i, y in enumerate(ys)}
     
@@ -42,7 +42,7 @@ def part2(d: list[str]) -> int:
     v_edges = []
     for i in range(n):
         p1 = points[i]
-        p2 = points[(i + 1) % n]
+        p2 = points[i - 1]
         if p1[0] == p2[0]:
             xi = x_map[p1[0]]
             y_start = y_map[p1[1]]
