@@ -17,7 +17,7 @@ TEST_OUTPUT2 = 24
 def process_data(d: list[str]):
     return [list(map(int, line.split(','))) for line in d]
 
-@run_solver("Part 1", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT1)], profile=True)
+@run_solver("Part 1", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT1)])
 def part1(d: list[str]) -> int:
     data = process_data(d)
     max_found = 0
@@ -28,7 +28,7 @@ def part1(d: list[str]) -> int:
     return max_found
 
 
-@run_solver("Part 2", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT2)], profile=True)
+@run_solver("Part 2", submit_result=False, tests=[(TEST_INPUT, TEST_OUTPUT2)])
 def part2(d: list[str]) -> int:
     points = process_data(d)
     n = len(points)
